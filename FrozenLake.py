@@ -14,10 +14,17 @@ import random
 import numpy as np
 import tensorflow as tf
 
+def choose_action(state):
+    print("choix action")
+
+def learn(state_before, state_after, reward, action):
+    print('learn from: ', state_before, state_after, reward, action)
+
 env = gym.make('FrozenLake-v0')
 env.reset()
 
-
+total_episodes = 10
+max_steps = 200
 
 for episode in range(total_episodes):
     while t > max_steps:
@@ -30,3 +37,4 @@ for episode in range(total_episodes):
 # [State(S), Action(A)][reward[Q?]]
 # ACTION : nord, sud, est ou ouest
 # [S,A] -> QTable (Q)
+# epsilon : taux d'exploration => Si exploitation : pif
