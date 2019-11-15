@@ -17,13 +17,16 @@ import tensorflow as tf
 env = gym.make('FrozenLake-v0')
 env.reset()
 
-#for partie < nb_max_partie:
-#    for step:
-#        choose_action(state)
-#        .step(action_choisie)
-#        learn(state, stateafteraction, reward, action)
-#        state = state 2
+
+
+for episode in range(total_episodes):
+    while t > max_steps:
+        action = choose_action(state)
+        state2, reward, done, info = env.step(action)
+        learn(state, state2, reward, action)
+        state = state2
+
+
 # [State(S), Action(A)][reward[Q?]]
 # ACTION : nord, sud, est ou ouest
 # [S,A] -> QTable (Q)
-
