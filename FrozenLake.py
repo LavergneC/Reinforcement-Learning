@@ -7,26 +7,38 @@
 # THE SOFTWARE.
 
 import gym
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.optimizers import Adam
+#from keras.models import Sequential
+#from keras.layers import Dense
+#from keras.optimizers import Adam
 import random
 import numpy as np
 import tensorflow as tf
-
-def choose_action(state):
-    print("choix action")
-    return random.rand_range(0, 4)
-
-def learn(state_before, state_after, reward, action):
-    print('learn from: ', state_before, state_after, reward, action)
+import time
 
 env = gym.make('FrozenLake-v0')
 env.reset()
 
-total_episodes = 10
+total_episodes = 1
 max_steps = 200
+epsilon = 0.5
+lr_rate = 0.81
+gamma = 0.96
+Q = np.zeros((env.observation_space.n, env.action_space.n))
 t=0
+
+
+def choose_action(state):
+    action=0
+    if np.random.uniform(0, 1) < epsilon:
+        action = env.action_space.sample()
+    else:
+        action = np.argmax(Q[state, :])
+    return action
+
+def learn(state, state2, reward, action):
+    old_value = Q[state, action]
+    learned_value = reward + gamma * np.max(Q[state2, :])
+    Q[state, action] = (1 - lr_rate) * old_value +  lr_rate * learned_value
 
 for episode in range(total_episodes):
     while t > max_steps:
@@ -35,6 +47,10 @@ for episode in range(total_episodes):
         learn(state, state2, reward, action)
         state = state2
         t += 1
+        if done :
+            break
+        time.sleep(0.1)
+print(Q)
 
 
 # [State(S), Action(A)][reward[Q?]]
