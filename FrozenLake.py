@@ -16,6 +16,7 @@ import tensorflow as tf
 
 def choose_action(state):
     print("choix action")
+    return random.rand_range(0, 4)
 
 def learn(state_before, state_after, reward, action):
     print('learn from: ', state_before, state_after, reward, action)
@@ -25,6 +26,7 @@ env.reset()
 
 total_episodes = 10
 max_steps = 200
+t=0
 
 for episode in range(total_episodes):
     while t > max_steps:
@@ -32,6 +34,7 @@ for episode in range(total_episodes):
         state2, reward, done, info = env.step(action)
         learn(state, state2, reward, action)
         state = state2
+        t += 1
 
 
 # [State(S), Action(A)][reward[Q?]]
