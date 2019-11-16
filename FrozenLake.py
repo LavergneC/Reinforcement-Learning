@@ -18,7 +18,7 @@ import time
 env = gym.make('FrozenLake-v0')
 env.reset()
 
-total_episodes = 1000
+total_episodes = 5000
 max_steps = 100
 epsilon = 0.5
 lr_rate = 0.81
@@ -31,27 +31,39 @@ def choose_action(state):
         action = env.action_space.sample()
     else:
         action = np.argmax(Q[state, :])
-    print(action)
+    #print(action)
     return action
 
 def learn(state, state2, reward, action):
     old_value = Q[state, action]
+    #print("Rew:",reward)
+    if state == state2 or state2 in prev_states:
+        reward = -10
     learned_value = reward + gamma * np.max(Q[state2, :])
     Q[state, action] = (1 - lr_rate) * old_value +  lr_rate * learned_value
 
+rews = []
 for episode in range(total_episodes):
     state = env.reset()
     t=0
+    prev_states = []
     while t < max_steps:
-        env.render()
+        #env.render()
         action = choose_action(state)
         state2, reward, done, info = env.step(action)
         learn(state, state2, reward, action)
+        rews.append(reward)
         state = state2
         t += 1
         if done :
+           # print("made in",t)
             break
+    v = round((episode/total_episodes)*100,2)
+    print(f'{v}%')
 print(Q)
+print(rews.count(1.0), len(rews))
+np.save("maTable",Q)
+
 
 # [State(S), Action(A)][reward[Q?]]
 # ACTION : nord, sud, est ou ouest
