@@ -14,7 +14,7 @@ nb_sucess = 0
 
 Q = np.load("maTable.npy")
 
-env = gym.make('FrozenLake-v0')
+env = gym.make('Taxi-v3')
 
 def choose_action(state):
     action = np.argmax(Q[state, :])
